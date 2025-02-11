@@ -2,7 +2,6 @@
 Date: 2024
 Title: Django Notes
 Description: Notas personales de como utilizar django para el desarrollo
-Image: django.png
 ---
 
 # Articulos de lectura
