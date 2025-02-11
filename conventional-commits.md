@@ -2,6 +2,7 @@
 Date: 2024-09-22
 Title: Conventional Commits
 Description: Como utilizar los convetional commits es buena practica
+Image: commit.png
 ---
 
 # Conventional commits, a good practice
