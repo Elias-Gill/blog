@@ -1,3 +1,9 @@
+---
+Date: 2025-02-11
+Title: Implementando http 1.0
+Description: Una simple introduccion al protocolo http1.0.
+---
+
 # 🌐 HTTP 1.0: No es magia negra, solo un protocolo simple  
 
 Si alguna vez has usado un navegador web, es muy probable que hayas interactuado con HTTP sin
