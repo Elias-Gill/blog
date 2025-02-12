@@ -1,5 +1,5 @@
 ---
-Date: 2024
+Date: 2024-09-21
 Title: Django Notes
 Description: Notas personales de como utilizar django para el desarrollo
 ---
