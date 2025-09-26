@@ -1,7 +1,7 @@
 ---
 Date: 2024-09-21
 Title: Django Notes
-Description: Notas personales de como utilizar django para el desarrollo
+Description: Notas personales de como utilizar django para el desarrollo. Es mas para probar las capacidades de mi web.
 ---
 
 # Articulos de lectura
@@ -9,8 +9,8 @@ Description: Notas personales de como utilizar django para el desarrollo
 - [Tutorial oficial de Django](https://docs.djangoproject.com/es/5.0/intro/)
 - [Implementando roles](https://permify.co/post/rbac-in-django/)
 - [Mas de roles](https://forum.djangoproject.com/t/how-to-create-custom-users-with-different-roles-types/20772)
-- [FBV vs CBV](https://spookylukey.github.io/django-views-the-right-way/)
-- [Code standars](https://docs.pylint.org/tutorial.html)
+- [FBV vs CBV](https://spookylukey.github.io/django-views-the-right-way/)
+- [Code standars](https://docs.pylint.org/tutorial.html)
 
 ---
 
@@ -35,8 +35,8 @@ Esto generara la siguiente estructura de archivos:
   Una utilidad de la línea de comandos que le permite interactuar con este proyecto Django de
   diferentes formas.
 - En interior del directorio `mysite/` es el propio paquete de Python para su proyecto.
-  Su nombre es el nombre del paquete de Python que usted tendrá que utilizar para importar
-  todo dentro de este (por ejemplo, mysite.urls).
+  Su nombre es el nombre del paquete de Python que usted tendrá que utilizar para importar todo
+  dentro de este (por ejemplo, mysite.urls).
 - `mysite/__init__.py`:
   Un archivo vacío que le indica a Python que este directorio debería ser considerado como un
   paquete Python.
@@ -44,8 +44,8 @@ Esto generara la siguiente estructura de archivos:
   Ajustes/configuración para este proyecto Django.
   Django settings le indicará todo sobre cómo funciona la configuración.
 - `mysite/urls.py`:
-  Las declaraciones URL para este proyecto Django; una «tabla de contenidos» de su sitio
-  basado en Django.
+  Las declaraciones URL para este proyecto Django; una «tabla de contenidos» de su sitio basado
+  en Django.
 - `mysite/asgi.py`:
   An entry-point for ASGI-compatible web servers to serve your project.
 - `mysite/wsgi.py`:
@@ -227,7 +227,7 @@ admin.site.register(Question)
 
 NOTA:
 para customizar el sitio de administrador visitar:
-https://docs.djangoproject.com/es/5.0/intro/tutorial07/
+[https://docs.djangoproject.com/es/5.0/intro/tutorial07/](https://docs.djangoproject.com/es/5.0/intro/tutorial07/)
 
 ---
 
@@ -495,16 +495,16 @@ Para mas informacion ver:
 
 ## Compressor
 
-Django Compressor es una herramienta para gestionar y optimizar archivos estáticos en
-proyectos Django.
+Django Compressor es una herramienta para gestionar y optimizar archivos estáticos en proyectos
+Django.
 
 Sus principales funciones son:
 - Minificación:
   Reduce el tamaño de archivos CSS y JavaScript eliminando espacios en blanco, comentarios y
   otros caracteres innecesarios.
 - Concatenación:
-  Combina múltiples archivos CSS o JavaScript en uno solo para reducir el número de
-  solicitudes HTTP al servidor, lo que mejora el rendimiento.
+  Combina múltiples archivos CSS o JavaScript en uno solo para reducir el número de solicitudes
+  HTTP al servidor, lo que mejora el rendimiento.
 
 ```html
 {% load compress %}

@@ -1,134 +1,187 @@
 ---
-Date: 2025-02-11
-Title: Implementando http 1.0
-Description: Una simple introduccion al protocolo http1.0.
-Image: http1.0.png
+Date: 2025-03-08
+Title: 🌐 Implemetando HTTP 1.0
+Description: Explicación e implementación simple del protocolo HTTP/1.0 en Java. Una introduccion a los protocolos de transporte.
+Image: portadas/http1.0.png
 ---
 
-# 🌐 HTTP 1.0: No es magia negra, solo un protocolo simple  
+# HTTP 1.0: No es magia negra
 
-Si alguna vez has usado un navegador web, es muy probable que hayas interactuado con HTTP sin
-siquiera darte cuenta.
-Pero, ¿cuántos de nosotros realmente entendemos cómo funciona este protocolo?
-Spoiler:
-no es magia negra, solo una serie de mensajes bien estructurados.  
+El protocolo HTTP, como probablemente ya sabes, es un protocolo creado en 1989 para permitir la
+comunicación entre distintas computadoras, sin importar el hardware o software que utilicen.
 
-Hoy quiero hablar sobre **HTTP 1.0**, una versión sencilla del protocolo, y mostrar cómo
-implementar un pequeño servidor en **Java** para entenderlo desde dentro.  
+Puede que ya tengas bastante experiencia realizando peticiones web con cualquier lenguaje,
+tanto en el backend como en el frontend.
+Pero, ¿realmente sabes cómo funciona el protocolo HTTP por debajo?
+¿Me creerías si te digo que puedes implementarlo en menos de una hora?
+Y no, no me refiero a utilizar librerías como Express o la librería estándar del lenguaje de
+turno, sino a implementarlo desde cero.
 
----
+## ¿Qué es un protocolo?
 
-## 🕸️ **¿Qué es HTTP 1.0?**  
+Primero, debemos definir qué es un "protocolo".
+Siempre escuchamos esa palabra, pero ¿qué significa realmente?
 
-HTTP 1.0 fue definido en **1996** en la RFC 1945.
-A diferencia de versiones posteriores, **no soporta conexiones persistentes** por defecto.
-Es decir, **por cada solicitud, se abre y cierra una conexión nueva**.  
+Un protocolo es simplemente un conjunto de reglas que tanto el emisor como el receptor conocen
+y entienden, y que deben seguir al pie de la letra para poder comunicarse entre sí.
 
-Un mensaje HTTP 1.0 típico luce así:  
+Por ejemplo, supongamos que queremos ponernos de acuerdo con nuestro compañero de piso sobre
+qué comeremos hoy.
+Para esto, podemos inventarnos un protocolo de comunicación entre nosotros.
 
-```HTTP
-GET /index.html HTTP/1.0
-Host: example.com
-User-Agent: curl/8.0
+> Para comunicarnos, nos escribiremos cartas, las cuales serán entregadas al destino por un perro salchicha mensajero (como todo buen servicio de correo).
+>
+> Además, nuestra carta debe tener el siguiente formato:
+
+```txt
+version
+remitente
+destinatario
+elegir | aceptar | rechazar
+[dia comida]
 ```
 
-El servidor responde con algo como:  
+_Ejemplo:_
 
-```HTTP
+```txt
+1
+Elias
+Marcos
+elegir
+lunes pizza
+
+1
+Marcos
+Elias
+aceptar
+```
+
+Pero, ¿qué significa todo esto?
+Vamos paso a paso:
+- Primero, definimos claramente cuál será el medio para escribir el mensaje (en una carta).
+- Segundo, cuál será el canal por el cual se enviará dicha carta (un perro salchicha
+  mensajero).
+- Luego, definimos el formato que debe tener dicha carta:
+    - El primer campo, como en todo buen protocolo que puede cambiar con el tiempo, es la
+      versión.
+      En este caso, esta es la versión 1 de nuestro protocolo de comunicación.
+    - Luego siguen el remitente y el destinatario (bastante autoexplicativo).
+    - Después, le sigue la acción que queremos realizar, en este caso pueden ser de tres tipos:
+      elegir, aceptar o rechazar.
+    - Finalmente, contamos con el último campo, el cual solo es requerido cuando la acción a
+      realizar es "elegir".
+      Aquí ponemos el día de la semana y la comida que deseamos comer ese día.
+
+Este protocolo, categóricamente, es un protocolo de juguete y bastante simple, pero nos sirve
+para ilustrar el concepto detrás de HTTP.
+
+Entonces, desde ahora, para comunicarnos entre compañeros, cada uno debe mandar cartas con ese
+formato.
+Si algún día se nos une otra persona, dicha persona solo debe aprender a leer y escribir dicho
+formato para poder comunicarse y ser parte de la discusión.
+
+Pero, ¿esto qué tiene que ver con HTTP?
+Todo.
+Los protocolos de comunicación no son más que un conjunto de reglas que definen el formato, el
+canal y el idioma en el que se deben mandar los mensajes.
+Estos mensajes, a su vez, tienen un significado común entre el emisor y el receptor.
+
+# Características de HTTP 1.0
+
+Tomando como base nuestro mini protocolo, ahora podemos ver cómo está estructurado el protocolo
+HTTP 1.0:
+- El medio de codificación del mensaje es mediante un STRING (sí, UN SIMPLE STRING).
+- El canal de enlace es mediante una conexión
+  [TCP](https://es.wikipedia.org/wiki/Protocolo_de_control_de_transmisi%C3%B3n).
+- Un mensaje HTTP 1.0 puede ser de "petición" o de "respuesta".
+  Ambos cuentan con una ligera variación en formato.
+
+## Mensaje de respuesta
+
+Podemos analizar una respuesta de cualquier servidor web utilizando `curl` e imprimiendo la
+petición de manera cruda o verbosa.
+Si hacemos esto, podemos ver algo parecido a esto:
+
+```http
 HTTP/1.0 200 OK
+Server: Apache/1.3.37
 Content-Type: text/html
-Content-Length: 125
+Content-Length: 1234
+Date: Mon, 23 Oct 2023 12:00:00 GMT
 
+<!DOCTYPE html>
 <html>
+    <head>
+        <title>Example</title>
+    </head>
     <body>
-        <h1>Hola, HTTP 1.0</h1>
+        Hello, World!
     </body>
 </html>
 ```
 
-Cada solicitud es **independiente** y el servidor **no mantiene estado** entre ellas.
-Simple, ¿verdad?  
+El primer campo es **siempre** "HTTP/<versión>" (en este caso 1.0), luego le sigue el código de
+respuesta (puedes ver los códigos
+[aquí](https://es.wikipedia.org/wiki/Anexo:C%C3%B3digos_de_estado_HTTP)), y luego el mensaje de
+estado.
 
----
+Vemos que los siguientes campos están separados por una nueva línea, pero esto no es así del
+todo.
+En realidad, cada nueva línea se realiza utilizando el formato de nueva línea llamado CRLF, el
+cual es simplemente `\r\n`.
 
-## 🖥️ **Implementando un servidor HTTP 1.0 en Java**  
+Cada nueva línea representa un nuevo header.
+Cada header está formado por un "nombre" seguido de ":" y luego el contenido del header.
+En cada header, podemos guardar la información que queramos.
+De hecho, podemos colocar un header personalizado como "mi_header:
+contenido personalizado", pero debemos tener en cuenta que existe un estándar de headers que la
+comunidad emplea y son reconocidos por cualquier implementación.
 
-Para ver HTTP 1.0 en acción, construí un pequeño **servidor en Java** usando `ServerSocket`.
-Aquí una versión simplificada:  
+Dentro de los headers, el más importante es el header "Content-Length", el cual nos dice el
+tamaño de los datos del body en bytes.
+Este header es completamente obligatorio, salvo en los casos donde el código de retorno sea 204
+(No Content).
 
-```java
-import java.io.*;
-import java.net.*;
+Luego de la sección de headers, la cual puede contener un número indefinido de headers, viene
+el body.
+Como dijimos antes, el tamaño del body está dado por el header "Content-Length", pero, para
+separar el body de la sección de headers, se utiliza un _doble_ salto de línea.
 
-public class SimpleHttpServer {
-    public static void main(String[] args) throws IOException {
-        ServerSocket server = new ServerSocket(8080);
-        System.out.println("Servidor HTTP 1.0 corriendo en el puerto 8080...");
-
-        while (true) {
-            Socket client = server.accept();
-            handleClient(client);
-        }
-    }
-
-    private static void handleClient(Socket client) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        PrintWriter writer = new PrintWriter(client.getOutputStream());
-
-        String requestLine = reader.readLine();
-        System.out.println("Solicitud recibida: " + requestLine);
-
-        writer.println("HTTP/1.0 200 OK");
-        writer.println("Content-Type: text/plain");
-        writer.println();
-        writer.println("Hola desde un servidor HTTP 1.0 en Java!");
-        writer.flush();
-
-        client.close();
-    }
-}
-```
-
-Este código:
-✅ Escucha en el puerto 8080.
-✅ Acepta conexiones entrantes.
-✅ Responde con un mensaje HTTP 1.0 válido.
-✅ Cierra la conexión después de cada respuesta.  
-
----
-
-## 🛠️ **Probando con cURL**  
-
-Con el servidor corriendo, podemos hacer una solicitud con `curl`:  
-
-```bash
-curl -v http://localhost:8080
-```
-
-Salida esperada:  
+Por tanto, el formato nos quedaría así:
 
 ```txt
-> GET / HTTP/1.0
-> Host: localhost
-> 
-< HTTP/1.0 200 OK
-< Content-Type: text/plain
-< 
-< Hola desde un servidor HTTP 1.0 en Java!
+HTTP/[Versión] [Código de estado] [Mensaje de estado]
+[Header1]: [Valor1]
+[Header2]: [Valor2]
+...
+[HeaderN]: [ValorN]
+
+[Body] (opcional)
 ```
 
-🎯 **¡Y listo!
-Un servidor HTTP 1.0 básico funcionando!**  
+> **NOTA:** Los headers en HTTP son case-insensitive.
 
----
+## Petición
 
-## 🚀 **Reflexión Final**  
+Para las peticiones HTTP, lo único que cambia es el formato del primer campo, el cual contiene
+primero el método (GET, POST, PUT, etc.), seguido del URL a donde va la petición.
 
-Mucha gente usa HTTP todos los días sin saber cómo funciona.
-Pero, como vimos, **no es magia negra**, solo un protocolo simple basado en texto.
-Implementar un servidor en Java me ayudó a comprender mejor su funcionamiento, y espero que
-este post te motive a hacer lo mismo.  
+```txt
+[Método] [URI] HTTP/[Versión]
+[Header1]: [Valor1]
+[Header2]: [Valor2]
+...
+[HeaderN]: [ValorN]
 
-¿Has construido algo similar?  
+[Body] (opcional)
+```
 
-#Networking #Java #HTTP #DesarrolloWeb
+Podemos notar que el protocolo HTTP es simplemente un formato para enviar mensajes, pero el
+verdadero significado de la información que mandamos se lo damos nosotros como programadores.
+Ninguno de los headers o los métodos como GET o POST realmente significa nada por sí solo.
+Por ejemplo, cualquier programador podría hacer que en su método POST se realice la eliminación
+de alguna entrada de la base de datos, o que la petición GET cree un nuevo usuario.
+Pero el estándar nos dice qué cosas se realizan con cada información y header, por lo que la
+comunidad sigue esas reglas.
+
+# Implementacion en JAVA

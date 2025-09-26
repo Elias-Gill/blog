@@ -1,8 +1,8 @@
 ---
 Date: 2024-09-22
-Title: Conventional Commits
-Description: Como utilizar los convetional commits es buena practica
-Image: commit.png
+Title: 🖥️ Conventional Commits
+Description: Un resumen (hecho con IA) sobre la utilidad y como utilizar los conventional commits segun cada caso.
+Image: portadas/commit.png
 ---
 
 # Conventional commits, a good practice
@@ -10,6 +10,8 @@ Image: commit.png
 Conventional Commits is a specification for writing commit messages in a way that is easy for
 humans and machines to understand.
 It defines a standard format for commit messages, which consists of the following parts:
+
+![imagen](/media/http1.0.png)
 
 ### Parts
 - _Type_:
