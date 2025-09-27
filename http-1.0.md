@@ -7,8 +7,8 @@ Image: portadas/http1.0.png
 
 # HTTP 1.0: No es magia negra
 
-El protocolo HTTP, como probablemente ya sabes, es un protocolo creado en 1989 para permitir la
-comunicación entre distintas computadoras, sin importar el hardware o software que utilicen.
+El protocolo HTTP es un protocolo creado en 1989 para permitir la comunicación entre distintas
+computadoras, sin importar el hardware o software que utilicen.
 
 Puede que ya tengas bastante experiencia realizando peticiones web con cualquier lenguaje,
 tanto en el backend como en el frontend.
@@ -22,133 +22,135 @@ turno, sino a implementarlo desde cero.
 Primero, debemos definir qué es un "protocolo".
 Siempre escuchamos esa palabra, pero ¿qué significa realmente?
 
-Un protocolo es simplemente un conjunto de reglas que tanto el emisor como el receptor conocen
-y entienden, y que deben seguir al pie de la letra para poder comunicarse entre sí.
+Un protocolo es simplemente un conjunto de reglas y pasos que tanto el emisor como el receptor
+conocen y entienden, y que deben seguir al pie de la letra para poder comunicarse entre sí.
+Esto funciona igual que cualquier comunicación en la vida real, donde existe un emisor, un
+receptor, un mensaje que se quiere enviar, el canal por el cual se envía el mensaje, el
+contexto de la "conversación" y un código de común entendimiento para codificar el mensaje.
 
-Por ejemplo, supongamos que queremos ponernos de acuerdo con nuestro compañero de piso sobre
-qué comeremos hoy.
-Para esto, podemos inventarnos un protocolo de comunicación entre nosotros.
+Veamos las partes de una comunicación:
 
-> Para comunicarnos, nos escribiremos cartas, las cuales serán entregadas al destino por un perro salchicha mensajero (como todo buen servicio de correo).
->
-> Además, nuestra carta debe tener el siguiente formato:
-
-```txt
-version
-remitente
-destinatario
-elegir | aceptar | rechazar
-[dia comida]
-```
-
-_Ejemplo:_
-
-```txt
-1
-Elias
-Marcos
-elegir
-lunes pizza
-
-1
-Marcos
-Elias
-aceptar
-```
-
-Pero, ¿qué significa todo esto?
-Vamos paso a paso:
-- Primero, definimos claramente cuál será el medio para escribir el mensaje (en una carta).
-- Segundo, cuál será el canal por el cual se enviará dicha carta (un perro salchicha
-  mensajero).
-- Luego, definimos el formato que debe tener dicha carta:
-    - El primer campo, como en todo buen protocolo que puede cambiar con el tiempo, es la
-      versión.
-      En este caso, esta es la versión 1 de nuestro protocolo de comunicación.
-    - Luego siguen el remitente y el destinatario (bastante autoexplicativo).
-    - Después, le sigue la acción que queremos realizar, en este caso pueden ser de tres tipos:
-      elegir, aceptar o rechazar.
-    - Finalmente, contamos con el último campo, el cual solo es requerido cuando la acción a
-      realizar es "elegir".
-      Aquí ponemos el día de la semana y la comida que deseamos comer ese día.
-
-Este protocolo, categóricamente, es un protocolo de juguete y bastante simple, pero nos sirve
-para ilustrar el concepto detrás de HTTP.
-
-Entonces, desde ahora, para comunicarnos entre compañeros, cada uno debe mandar cartas con ese
-formato.
-Si algún día se nos une otra persona, dicha persona solo debe aprender a leer y escribir dicho
-formato para poder comunicarse y ser parte de la discusión.
-
-Pero, ¿esto qué tiene que ver con HTTP?
-Todo.
-Los protocolos de comunicación no son más que un conjunto de reglas que definen el formato, el
-canal y el idioma en el que se deben mandar los mensajes.
-Estos mensajes, a su vez, tienen un significado común entre el emisor y el receptor.
+1. Primero debemos definir claramente el canal por el cual se enviará el mensaje (en la vida
+   real serían medios físicos, como cartas, mensajes, llamadas, etc).
+2. Luego debemos definir el formato (o código) que debe tener dicho mensaje.
+   En la vida real este sería nuestro idioma, y del mismo modo que cada idioma tiene unas
+   reglas y construcciones, cada protocolo en computación viene con su propio conjunto de
+   reglas y formas de estructurar el mensaje de modo que el emisor y receptor estén de acuerdo.
+3. Al igual que los elementos de la comunicación (esos que se ven en el colegio), una
+   comunicación en un protocolo también cuenta con:
+    - emisor, 
+    - receptor 
+    - y contexto.
 
 # Características de HTTP 1.0
 
-Tomando como base nuestro mini protocolo, ahora podemos ver cómo está estructurado el protocolo
-HTTP 1.0:
-- El medio de codificación del mensaje es mediante un STRING (sí, UN SIMPLE STRING).
-- El canal de enlace es mediante una conexión
-  [TCP](https://es.wikipedia.org/wiki/Protocolo_de_control_de_transmisi%C3%B3n).
-- Un mensaje HTTP 1.0 puede ser de "petición" o de "respuesta".
-  Ambos cuentan con una ligera variación en formato.
+El protocolo HTTP 1.0 es la primera iteración del protocolo HTTP, y es la especificación más
+simple y fácil de implementar, tanto que se puede hacer en poco más de una hora por cualquier
+persona versada en programación.
 
-## Mensaje de respuesta
+Veamos las especificaciones de la comunicación por HTTP 1.0:
 
-Podemos analizar una respuesta de cualquier servidor web utilizando `curl` e imprimiendo la
-petición de manera cruda o verbosa.
-Si hacemos esto, podemos ver algo parecido a esto:
+1. El canal que se utiliza para enviar los mensajes son **conexiones TCP**.
+2. Para realizar una conexión TCP de por sí ya debemos proporcionar un receptor (el IP y puerto
+   del receptor al cual queremos contactar) y emisor.
+3. El protocolo HTTP es especial, ya que es un protocolo **sin contexto** (más específicamente
+   sin estado o _stateless_), esto significa que el servidor naturalmente no guarda información
+   acerca del receptor; si se quisiera mantener un contexto dentro de la comunicación (como
+   sesiones de usuario, login, etc) entonces se deben implementar mecanismos externos como
+   cookies o JWT (es decir, mecanismos que no están _especificados_ dentro de la especificación
+   del protocolo HTTP).
 
-```http
+## El código de comunicación. Encabezados del protocolo HTTP
+
+La forma más fácil de visualizar cómo está estructurado un mensaje en HTTP 1.0 es usando la
+herramienta `curl -i` para mostrar el resultado de las peticiones en formato "crudo".
+Además, debemos primeramente notar que existen 2 formatos de encabezados de un mensaje en el
+protocolo HTTP:
+
+1. Uno para realizar una petición (request).
+2. Otro para responder a una petición (response).
+
+### Response message
+
+Lo que siempre ocurre:
+realizamos una _request_ y recibimos un _response_ por parte del server.
+
+Si utilizamos curl para realizar una petición a un sitio web cualquiera y usamos el flag `-i`,
+entonces podremos ver el mensaje de respuesta completo por parte del servidor, es decir, el
+mensaje de tipo _response_:
+
+```txt
+$> curl -i --http1.0 http://example.com/
+
 HTTP/1.0 200 OK
-Server: Apache/1.3.37
+Date: Fri, 26 Sep 2025 15:20:00 GMT
+Server: Apache/1.3.42 (Unix)
 Content-Type: text/html
-Content-Length: 1234
-Date: Mon, 23 Oct 2023 12:00:00 GMT
+Content-Length: 137
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Example</title>
-    </head>
-    <body>
-        Hello, World!
-    </body>
+  <head>
+    <title>Example Domain</title>
+  </head>
+  <body>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples in documents.</p>
+  </body>
 </html>
 ```
 
-El primer campo es **siempre** "HTTP/<versión>" (en este caso 1.0), luego le sigue el código de
-respuesta (puedes ver los códigos
-[aquí](https://es.wikipedia.org/wiki/Anexo:C%C3%B3digos_de_estado_HTTP)), y luego el mensaje de
-estado.
+Lo primero que debemos advertir es que esto se envía como **texto plano**, es decir, _strings_
+de toda la vida.
+Esto hace mucho más fácil implementar nuestro propio servidor HTTP, aunque por supuesto trae
+desventajas por el lado del performance del protocolo; es por eso que existen otros protocolos
+que operan con headers y mensajes en arrays de bits (uno estándar bastante fácil de parsear y
+entender si quieres aventurarte es el de imágenes en formato BMP).
 
-Vemos que los siguientes campos están separados por una nueva línea, pero esto no es así del
-todo.
-En realidad, cada nueva línea se realiza utilizando el formato de nueva línea llamado CRLF, el
-cual es simplemente `\r\n`.
+Podemos notar que este mensaje tiene el siguiente formato, el cual se repetirá siempre que
+queramos contactarnos con un servidor HTTP, dado que la especificación nos dice que así debe
+ser estructurado cada mensaje:
 
-Cada nueva línea representa un nuevo header.
-Cada header está formado por un "nombre" seguido de ":" y luego el contenido del header.
-En cada header, podemos guardar la información que queramos.
-De hecho, podemos colocar un header personalizado como "mi_header:
-contenido personalizado", pero debemos tener en cuenta que existe un estándar de headers que la
-comunidad emplea y son reconocidos por cualquier implementación.
+```txt
+<VERSION> <STATUS_CODE> <STATUS_MESSAGE>
+<Headers>
+<Body opcional>
+```
 
-Dentro de los headers, el más importante es el header "Content-Length", el cual nos dice el
-tamaño de los datos del body en bytes.
-Este header es completamente obligatorio, salvo en los casos donde el código de retorno sea 204
-(No Content).
+Desglosando este mensaje:
 
-Luego de la sección de headers, la cual puede contener un número indefinido de headers, viene
-el body.
-Como dijimos antes, el tamaño del body está dado por el header "Content-Length", pero, para
-separar el body de la sección de headers, se utiliza un _doble_ salto de línea.
+1. **Línea de estado (status line)**
+    * **VERSION** → versión del protocolo, en este caso `HTTP/1.0`.
+    * **STATUS_CODE** → el código numérico que indica el resultado de la petición (`200`,
+      `404`, `500`, etc.).
+    * **STATUS_MESSAGE** → un texto corto que acompaña al código (`OK`, `Not Found`, `Internal
+      Server Error`).
+    * Cada línea de encabezado está marcada y separada con los siguientes caracteres:
+      `\r\n`.
+2. **Encabezados (headers)** Aquí se agrega metadata sobre la respuesta.
+   Algunos son opcionales, pero hay ciertos headers que en la práctica resultan
+   imprescindibles:
+   * `Content-Length`:
+     **necesario** en HTTP/1.0, ya que el cliente lo usa para saber cuántos bytes debe leer del
+     body.
+   * `Content-Type`:
+     de existir, contiene el tipo de contenido del body (`text/html`, `application/json`,
+     `image/png`, etc.).
+     Ejemplo:
+    ```txt
+    Date: Fri, 26 Sep 2025 15:20:00 GMT
+    Server: Apache/1.3.42 (Unix)
+    Content-Type: text/html
+    Content-Length: 137
+    ```
+3. **Body (opcional)** Luego de un doble salto de línea (`\r\n\r\n`), viene el contenido
+   propiamente dicho:
+   HTML, JSON, una imagen, etc. Para eso es que nos sirven los encabezados de Content-Length y
+   Content-Type, así el servidor sabe cómo interpretar los bits del body.
 
-Por tanto, el formato nos quedaría así:
+> **NOTA:** Los headers en HTTP son case-insensitive.
 
+Otra forma de ver esto es la siguiente:
 ```txt
 HTTP/[Versión] [Código de estado] [Mensaje de estado]
 [Header1]: [Valor1]
@@ -159,12 +161,46 @@ HTTP/[Versión] [Código de estado] [Mensaje de estado]
 [Body] (opcional)
 ```
 
-> **NOTA:** Los headers en HTTP son case-insensitive.
+#### Notación extendida de mensajes
 
-## Petición
+Además del formato clásico con `Content-Length`, existe otro modo de enviar el body que se
+utiliza a partir de **HTTP/1.1**:
+los **mensajes chunked**.
+Este formato consiste en escribir la longitud del bloque en **hexadecimal**, seguida de `\r\n`,
+luego el contenido de ese bloque, y repetir el proceso hasta que se envíe un bloque de tamaño
+`0`.
 
-Para las peticiones HTTP, lo único que cambia es el formato del primer campo, el cual contiene
-primero el método (GET, POST, PUT, etc.), seguido del URL a donde va la petición.
+No vamos a profundizar en ese formato aquí, pero es importante saber que existe, ya que permite
+enviar respuestas de tamaño dinámico sin conocer la longitud total de antemano.
+
+### Request message
+
+Ahora, los mensajes de petición, es decir, los mensajes que por ejemplo un navegador mandaría a
+un servidor se ven de la siguiente forma:
+
+```txt
+POST /api/users HTTP/1.0
+Host: example.com
+User-Agent: curl/7.85.0
+Content-Type: application/json
+Content-Length: 47
+Accept: application/json
+
+{
+  "username": "elias",
+  "email": "test@example.com"
+}
+```
+
+De nuevo, la estructura que siguen los mensajes es la siguiente:
+
+```txt
+<METHOD> <PATH> <VERSION>
+<Headers>
+<Body opcional>
+```
+
+o de forma alternativa
 
 ```txt
 [Método] [URI] HTTP/[Versión]
@@ -176,12 +212,19 @@ primero el método (GET, POST, PUT, etc.), seguido del URL a donde va la petici�
 [Body] (opcional)
 ```
 
-Podemos notar que el protocolo HTTP es simplemente un formato para enviar mensajes, pero el
-verdadero significado de la información que mandamos se lo damos nosotros como programadores.
-Ninguno de los headers o los métodos como GET o POST realmente significa nada por sí solo.
-Por ejemplo, cualquier programador podría hacer que en su método POST se realice la eliminación
-de alguna entrada de la base de datos, o que la petición GET cree un nuevo usuario.
-Pero el estándar nos dice qué cosas se realizan con cada información y header, por lo que la
-comunidad sigue esas reglas.
+Podemos ver que son bastante parecidos, pero varían en algunas cuestiones, como en la primera
+línea la cual define el path de destino, el tipo de método que se está pidiendo, y en este caso
+el campo de versión se encuentra al final del encabezado a diferencia del mensaje de
+_response_. 
 
-# Implementacion en JAVA
+Y eso es todo, esas son las únicas diferencias entre los mensajes de envío y recepción del
+protocolo HTTP.
+¿Bastante fácil, verdad?
+
+El protocolo HTTP no es más que un formato para estructurar y enviar mensajes, pero el
+verdadero significado de la información se lo damos nosotros como programadores.
+Ninguno de los headers o los métodos como GET o POST realmente significa nada por sí solo.
+
+# Implementacion en Java
+
+CONTINUARA ...
