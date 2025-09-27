@@ -34,43 +34,33 @@ Aquí algunos ejemplos de los tipos de commit más usados:
 1. **feat**:
    nueva funcionalidad _Ejemplo:_ `feat(user):
    agregar sistema de login`
-
 2. **fix**:
    corrección de errores _Ejemplo:_ `fix(database):
    solucionar bug de consultas lentas`
-
 3. **style**:
    cambios de estilo (no funcionales) _Ejemplo:_ `style(code):
    formatear código de JavaScript`
-
 4. **refactor**:
    cambios internos de código sin modificar la lógica externa _Ejemplo:_ `refactor(auth):
    simplificar lógica de autenticación`
-
 5. **chore**:
    tareas de mantenimiento o soporte _Ejemplo:_ `chore(deploy):
    configurar pipeline de CI/CD`
-
 6. **ci**:
    cambios en procesos de integración continua _Ejemplo:_ `ci(cron):
    agregar tarea cron diaria para limpiar caché`
-
 7. **perf**:
    mejoras de rendimiento _Ejemplo:_ `perf(db):
    indexar columna de productos para optimizar consultas`
-
 8. **build**:
    cambios en la configuración de compilación o dependencias _Ejemplo:_ `build(webpack):
    actualizar configuración de webpack`
-
 9. **revert**:
    revertir un commit previo _Ejemplo:_ `revert(1234):
    deshacer cambio introducido en la versión anterior`
-
 10. **test**:
     añadir o actualizar pruebas _Ejemplo:_ `test(unit):
     actualizar tests unitarios para nueva API`
-
 11. **docs**:
     cambios en la documentación _Ejemplo:_ `docs(contributing):
     añadir guía de contribución`
