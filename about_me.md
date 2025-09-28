@@ -2,6 +2,7 @@
 Date: 2025-09-27
 Title: Algunas cosas sobre Mí
 Description: Un vistazo personal a quién soy, mis motivaciones, intereses en el mundo de la programación y algunos de mis pasatiempos.
+Image: /portadas/about-me.webp
 ---
 
 ![yo](/assets/yo.webp)
