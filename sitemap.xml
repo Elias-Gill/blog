@@ -1,38 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- entrada principal -->
+  <url>
+    <loc>https://portfolio-elias-gill.fly.dev/posts/</loc>
+    <lastmod>2025-09-25T18:16:33+00:00</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <!-- posts -->
   <url>
     <loc>https://portfolio-elias-gill.fly.dev/posts/PoliPlanner.md</loc>
     <lastmod>2025-09-25T18:16:33+00:00</lastmod>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://portfolio-elias-gill.fly.dev/posts/PoliPlanner_2.md</loc>
     <lastmod>2025-09-25T18:16:33+00:00</lastmod>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://portfolio-elias-gill.fly.dev/posts/PoliPlanner_3.md</loc>
     <lastmod>2025-09-25T18:16:33+00:00</lastmod>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://portfolio-elias-gill.fly.dev/posts/about_me.md</loc>
     <lastmod>2025-09-27T18:16:33+00:00</lastmod>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://portfolio-elias-gill.fly.dev/posts/conventional-commits.md</loc>
     <lastmod>2024-09-22T18:16:33+00:00</lastmod>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://portfolio-elias-gill.fly.dev/posts/django.md</loc>
     <lastmod>2024-09-22T18:16:33+00:00</lastmod>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://portfolio-elias-gill.fly.dev/posts/http-1.0.md</loc>
     <lastmod>2024-09-22T18:16:33+00:00</lastmod>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
 </urlset>
